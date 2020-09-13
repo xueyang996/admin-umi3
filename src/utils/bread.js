@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { Breadcrumb } from 'antd';
 import MyIcon from '@/components/MyIcon';
 import pathToRegexp from 'path-to-regexp';
@@ -34,32 +35,32 @@ const BREAD_INFO = {
 export function getBreadInfo(path, query) {
   let type;
   let breadInfo;
-  const result = Object.keys(BREAD_INFO).find(item => {
+  const result = Object.keys(BREAD_INFO).find((item) => {
     const match = pathToRegexp(item).exec(path);
     if (match && match.length > 2) {
-      type = match[1];
+      [type] = match;
     }
     return !!match && match.length > 0;
   });
 
   if (result) {
     breadInfo = BREAD_INFO[result];
-    let newBreadInfo = [];
+    const newBreadInfo = [];
+    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < breadInfo.length; i++) {
       const element = breadInfo[i];
       if (element.url) {
         const index = element.url.indexOf(':');
-        let url = element.url;
+        let { url } = element;
         if (index !== -1) {
           url = element.url.substring(0, index) + type;
-        } else {
-          if (element.queryKey) {
-            element.queryKey.forEach(element => {
-              url += `${element}=${query[element] || ''}&`;
-            });
-            url = url.substring(0, url.length - 1);
-          }
+        } else if (element.queryKey) {
+          element.queryKey.forEach((elementKey) => {
+            url += `${elementKey}=${query[elementKey] || ''}&`;
+          });
+          url = url.substring(0, url.length - 1);
         }
+
         newBreadInfo.push({
           name: element.name,
           url,
@@ -79,20 +80,16 @@ export function getBreadInfo(path, query) {
           lineHeight: '80px',
         }}
       >
-        {breadInfo.map(item => (
+        {breadInfo.map((item) => (
           <Breadcrumb.Item key={item.name}>
             {item.icon && (
-              <MyIcon
-                type={item.icon}
-                style={{ marginRight: '8px', fontSize: '16px' }}
-              ></MyIcon>
+              <MyIcon type={item.icon} style={{ marginRight: '8px', fontSize: '16px' }} />
             )}
             {item.url ? <a href={item.url}>{item.name}</a> : item.name}
           </Breadcrumb.Item>
         ))}
       </Breadcrumb>
     );
-  } else {
-    return <div></div>;
   }
+  return <div />;
 }

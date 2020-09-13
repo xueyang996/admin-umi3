@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import className from 'classnames';
+
 import {
   Form,
   Select,
   Input,
   InputNumber,
   DatePicker,
-  Switch,
-  Radio,
-  Slider,
-  Button,
-  Upload,
-  Rate,
-  Checkbox,
-  Row,
-  Col,
+  // Switch,
+  // Radio,
+  // Slider,
+  // Button,
+  // Upload,
+  // Rate,
+  // Checkbox,
+  // Row,
+  // Col,
 } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import VertifiCode from '@/components/Input/VerificationInput';
 import { InputType } from '@/utils/getMatch';
 
 import styles from './index.less';
+
 const { Option } = Select;
 
 export type FormItem = {
@@ -52,9 +53,9 @@ const formItemLayoutDefault = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
-const nopop = function() {};
+const nopop = function nopop() {};
 
-function getFormItem(item: FormItem) {
+function getFormItem(item: FormItem): React.ReactNode {
   const {
     type,
     label,
@@ -99,11 +100,13 @@ function getFormItem(item: FormItem) {
       );
     case 'select':
     case 'multiselect':
+      // eslint-disable-next-line no-case-declarations
       const mode = type === 'multiselect' ? 'multiple' : undefined;
       return (
         <Form.Item label={label} name={name} rules={rules}>
           <Select mode={mode} placeholder={placeholder}>
             {option &&
+              // eslint-disable-next-line no-shadow
               option.map((item: any) => {
                 return (
                   <Option key={item.value || item} value={item.value || item}>
@@ -115,7 +118,7 @@ function getFormItem(item: FormItem) {
         </Form.Item>
       );
     default:
-      break;
+      return <div />;
   }
 }
 
@@ -127,17 +130,20 @@ function MyFormV4(props: FormProps) {
     initialValues = {},
   } = props;
   const [relatedValue, setRelatedValue] = useState('');
+  const [formG] = Form.useForm();
   let formResult = formProps;
   if (!formResult) {
-    formResult = Form.useForm()[0];
+    formResult = formG;
   }
   // 对于多选中含有以上均无等选项特殊处理
   const handleValue = (values: any) => {
+    // eslint-disable-next-line no-plusplus
     for (let index = 0; index < list.length; index++) {
       const element = list[index];
       const { type, name, childName } = element;
       const value = values[name];
       if (type === 'multiselect' && value) {
+        // eslint-disable-next-line no-shadow
         const index = value.indexOf('以上均无');
         if (index === 0 && value.length > 1) {
           value.shift();
@@ -170,8 +176,9 @@ function MyFormV4(props: FormProps) {
         {...formItemLayout}
         initialValues={initialValues}
       >
-        {list.map((item: FormItem, index: number) => {
+        {list.map((item: FormItem) => {
           if (item.parentName && relatedValue) {
+            // eslint-disable-next-line no-param-reassign
             item.option = item.originOption![relatedValue];
           }
           return <div key={item.name}>{getFormItem(item)}</div>;

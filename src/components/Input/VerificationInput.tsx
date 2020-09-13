@@ -1,17 +1,16 @@
 import React, { useState, FC } from 'react';
-import { Input, Button } from 'antd';
-import { SearchProps } from 'antd/lib/input';
+import { Input } from 'antd';
 
 import styles from './VerificationInput.less';
 
-interface VerficationInputProps extends SearchProps {
+interface VerficationInputProps {
   /** 获取验证码的回调 */
   getVerifyCode: () => void;
   value?: string;
   onChange?: (value: string) => void;
 }
 
-const VerficationInput: FC<VerficationInputProps> = props => {
+const VerficationInput: FC<VerficationInputProps> = (props) => {
   const [btnText, setBtnText] = useState('发送验证码');
   const [btnStatus, setBtnStatus] = useState(false);
   const [code, setCode] = useState('');
@@ -19,10 +18,7 @@ const VerficationInput: FC<VerficationInputProps> = props => {
   const { getVerifyCode, value, onChange, ...restProps } = props;
 
   // 处理倒计时
-  const handleTimeDown = (
-    timer: ReturnType<typeof setTimeout> | null,
-    count: number,
-  ) => {
+  const handleTimeDown = (timer: ReturnType<typeof setTimeout> | null, count: number) => {
     if (timer) {
       clearTimeout(timer);
     }
@@ -41,14 +37,21 @@ const VerficationInput: FC<VerficationInputProps> = props => {
 
   // 获取验证码
   const getCode = () => {
-    getVerifyCode && getVerifyCode();
+    if (btnStatus) {
+      return;
+    }
+    if (getVerifyCode) {
+      getVerifyCode();
+    }
     setBtnStatus(true);
     handleTimeDown(null, 60);
   };
   const inputChange = (e: any) => {
-    const { value } = e.target;
-    onChange && onChange(value);
-    setCode(value);
+    const { value: changeValue } = e.target;
+    if (onChange) {
+      onChange(changeValue);
+    }
+    setCode(changeValue);
   };
 
   return (
@@ -58,11 +61,7 @@ const VerficationInput: FC<VerficationInputProps> = props => {
         value={value || code}
         onChange={inputChange}
         suffix={
-          <span
-            disabled={btnStatus}
-            className={styles.verifyBtn}
-            onClick={getCode}
-          >
+          <span className={styles.verifyBtn} onClick={getCode}>
             {btnText}
           </span>
         }

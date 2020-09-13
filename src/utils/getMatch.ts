@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 // 匹配信息
 const MATCH_INFO = {
   '80': {
@@ -28,11 +29,13 @@ const MATCH_INFO = {
  */
 export const getMatchInfo = (matchNumber = 0) => {
   const keys = Object.keys(MATCH_INFO)
-    .map(item => parseInt(item))
-    .sort(function(a, b) {
+    .map((item) => parseInt(item, 10))
+    // eslint-disable-next-line func-names
+    .sort(function (a, b) {
       return b - a;
     });
   let result;
+  // eslint-disable-next-line no-plusplus
   for (let index = 0, len = keys.length; index < len; index++) {
     const element = keys[index];
     if (matchNumber > element) {
@@ -41,7 +44,7 @@ export const getMatchInfo = (matchNumber = 0) => {
     }
   }
   return (
-    MATCH_INFO[result] || {
+    (result && MATCH_INFO[result]) || {
       text: '不匹配',
       color: 'rgba(136,136,136,1)',
       bgColor: 'rgba(136,136,136,0.08)',
@@ -49,20 +52,7 @@ export const getMatchInfo = (matchNumber = 0) => {
   );
 };
 
-/**
- *
- * @param {string} time 获取距离现在的time 天的开始时间、结束时间
- * @param {string} format 要返回的时间格式
- * @returns { boolean}
- */
-export const isOutDate = time => {
-  if (typeof time === 'string') {
-    time = time.replace('T', ' ').replace('.000+0800', '/');
-  }
-  return '';
-};
-
-export const getVideoImgArray = mediaContentList => {
+export const getVideoImgArray = (mediaContentList: any[]) => {
   const videoImgArray: any[] = [];
   for (let index = 0, len = mediaContentList.length; index < len; index++) {
     const element = mediaContentList[index];
@@ -74,7 +64,7 @@ export const getVideoImgArray = mediaContentList => {
       });
     } else {
       const urls = element.url || [];
-      for (let j = 0, length = urls.length; j < length; j++) {
+      for (let j = 0, { length } = urls; j < length; j++) {
         const url = urls[j];
         videoImgArray.push({
           type: element.type,
@@ -87,23 +77,19 @@ export const getVideoImgArray = mediaContentList => {
   return videoImgArray;
 };
 
-export type InputType =
-  | 'text'
-  | 'phone'
-  | 'select'
-  | 'multiselect'
-  | 'input'
-  | 'number'
-  | 'date';
+export type InputType = 'text' | 'phone' | 'select' | 'multiselect' | 'input' | 'number' | 'date';
 
 export const getType = (item: any): InputType => {
   if (item.valueType === 'NUMBER') {
     return 'number';
-  } else if (item.valueType === 'DATE') {
+  }
+  if (item.valueType === 'DATE') {
     return 'date';
-  } else if (item.type === 'INPUT_RADIO') {
+  }
+  if (item.type === 'INPUT_RADIO') {
     return 'select';
-  } else if (item.type === 'INPUT_CHECKBOX') {
+  }
+  if (item.type === 'INPUT_CHECKBOX') {
     return 'multiselect';
   }
   return 'input';
