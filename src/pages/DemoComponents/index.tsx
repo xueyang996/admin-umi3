@@ -3,6 +3,8 @@ import { Modal, Button, Form } from 'antd';
 import MyForm, { FormItem } from '@/components/MyForm/V4';
 import VertifyCode from '@/components/Input/VerificationInput';
 
+import ChartDemo from './compontents/chart';
+
 import styles from './index.less';
 
 export default (): React.ReactNode => {
@@ -72,6 +74,9 @@ export default (): React.ReactNode => {
       </Modal>
       <h3>验证码</h3>
       <VertifyCode getVerifyCode={() => {}} />
+
+      <h3>bizcharts图表demo</h3>
+      <ChartDemo />
     </div>
   );
 };

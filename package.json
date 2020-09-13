@@ -53,6 +53,7 @@
     "@ant-design/pro-layout": "^6.4.16",
     "@ant-design/pro-table": "^2.7.2",
     "antd": "^4.6.3",
+    "bizcharts": "^4.0.14",
     "classnames": "^2.2.6",
     "lodash": "^4.17.11",
     "moment": "^2.25.3",
