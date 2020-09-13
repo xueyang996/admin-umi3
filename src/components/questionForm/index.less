@@ -1,0 +1,59 @@
+@bgcolor: #f9f9f9;
+
+.container {
+  :global(.ant-btn) {
+    border: none;
+    // color: #848f9d;
+    // &:hover {
+    //   color: #21a1ff;
+    // }
+  }
+}
+.questions-form {
+  padding: 20px 0 0;
+}
+.form-item {
+  height: 0;
+  margin-bottom: 0 !important;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 8px 16px 0 rgba(172, 172, 172, 0.06);
+
+  :global(.ant-form-item-label > label) {
+    color: #334355;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  &.current {
+    box-sizing: border-box;
+    height: auto;
+    min-height: 80px;
+    max-height: 400px;
+    margin-bottom: 24px !important;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  &.height-auto {
+    height: auto;
+    margin-bottom: 24px;
+  }
+}
+
+// .handle-parent {
+//   position: fixed;
+//   box-sizing: border-box;
+//   left: 0;
+//   bottom: 0;
+//   width: 100%;
+//   padding: 10px*@hd 20px*@hd 27px*@hd;
+//   background: #fff;
+//   z-index: 11;
+
+//   display: flex;
+//   font-size: 16px*@hd;
+//   font-weight: 500;
+//   text-align: center;
+// }

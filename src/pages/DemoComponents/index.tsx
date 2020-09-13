@@ -4,6 +4,7 @@ import MyForm, { FormItem } from '@/components/MyForm/V4';
 import VertifyCode from '@/components/Input/VerificationInput';
 
 import ChartDemo from './compontents/chart';
+import QuestionStep from './compontents/questionStep';
 
 import styles from './index.less';
 
@@ -77,6 +78,8 @@ export default (): React.ReactNode => {
 
       <h3>bizcharts图表demo</h3>
       <ChartDemo />
+      <h3>问题搜集demo</h3>
+      <QuestionStep />
     </div>
   );
 };
