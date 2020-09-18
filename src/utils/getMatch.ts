@@ -77,7 +77,15 @@ export const getVideoImgArray = (mediaContentList: any[]) => {
   return videoImgArray;
 };
 
-export type InputType = 'text' | 'phone' | 'select' | 'multiselect' | 'input' | 'number' | 'date';
+export type InputType =
+  | 'text'
+  | 'phone'
+  | 'select'
+  | 'multiselect'
+  | 'selectSearch'
+  | 'input'
+  | 'number'
+  | 'date';
 
 export const getType = (item: any): InputType => {
   if (item.valueType === 'NUMBER') {
