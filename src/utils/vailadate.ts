@@ -26,7 +26,7 @@ export const validatePhoneForm = (_: any, value: any) => {
  * @param {string} password
  */
 const validatePWD = (password: string) => {
-  return /^[A-Za-z0-9]{6,20}$/.test(password);
+  return /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(password);
 };
 export const validatePWDForm = (_: any, value: string) => {
   try {
