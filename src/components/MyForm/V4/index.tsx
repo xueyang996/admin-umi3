@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { CSSProperties, useState } from 'react';
+// import className from 'classnames';
 import {
   Form,
   Select,
@@ -18,14 +18,15 @@ import {
 } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import VertifiCode from '@/components/Input/VerificationInput';
+import SelectSearch, { SearchProps } from '@/components/SelectSearch';
 import { InputType } from '@/utils/getMatch';
-
-import styles from './index.less';
 
 const { Option } = Select;
 
 export type FormItem = {
   type: InputType;
+  inputType?: string;
+  itemStyle?: CSSProperties;
   label: React.ReactNode | string;
   name: string;
   value?: string;
@@ -33,6 +34,10 @@ export type FormItem = {
   placeholder?: string;
   option?: { key: string; value: string }[];
   rules?: any[];
+  /** 是否可以搜索 */
+  showSearch?: boolean;
+  /** 是否隐藏字段（依然会收集和校验字段） */
+  hidden?: boolean;
   /** 关联选项 */
   childName?: string;
   /** 关联选项 父级 */
@@ -40,10 +45,11 @@ export type FormItem = {
   /** 关联选项 子选项 */
   originOption?: { [T: string]: any[] };
   getVerifyCode?: () => void;
+  checkPhone?: () => boolean;
 };
 
 export interface FormProps {
-  list: FormItem[];
+  list: (FormItem & SearchProps)[];
 
   form?: FormInstance;
   formItemLayout?: any;
@@ -55,9 +61,11 @@ const formItemLayoutDefault = {
 };
 const nopop = function nopop() {};
 
-function getFormItem(item: FormItem): React.ReactNode {
+function getFormItem(item: FormItem & SearchProps) {
   const {
     type,
+    inputType,
+    itemStyle,
     label,
     value,
     name,
@@ -65,7 +73,12 @@ function getFormItem(item: FormItem): React.ReactNode {
     rules,
     placeholder,
     dateFormat,
+    showSearch = false,
     getVerifyCode = nopop,
+    getOption,
+    getParams,
+    fetchOption,
+    hidden = false,
   } = item;
   switch (type) {
     case 'text':
@@ -83,19 +96,35 @@ function getFormItem(item: FormItem): React.ReactNode {
     case 'date':
       return (
         <Form.Item label={label} name={name}>
-          <DatePicker format={dateFormat || 'YYYY/MM/DD'} />
+          <DatePicker format={dateFormat || 'YYYY/MM/DD'} style={{ width: '100%' }} />
         </Form.Item>
       );
     case 'input':
       return (
-        <Form.Item label={label} name={name} rules={rules}>
-          <Input style={{ width: '100%' }} placeholder={placeholder} />
+        <Form.Item label={label} name={name} rules={rules} hidden={hidden}>
+          <Input type={inputType} style={itemStyle} placeholder={placeholder} />
         </Form.Item>
       );
     case 'phone':
       return (
-        <Form.Item label={label} name={name} style={{ width: '100%' }}>
-          <VertifiCode getVerifyCode={getVerifyCode} />
+        <Form.Item label={label} rules={rules} name={name} style={{ width: '100%' }}>
+          <VertifiCode
+            placeholder={placeholder}
+            checkPhone={item.checkPhone}
+            getVerifyCode={getVerifyCode}
+          />
+        </Form.Item>
+      );
+    case 'selectSearch':
+      return (
+        <Form.Item label={label} rules={rules} name={name} style={{ width: '100%' }}>
+          <SelectSearch
+            itemStyle={itemStyle}
+            placeholder={placeholder}
+            fetchOption={fetchOption}
+            getOption={getOption}
+            getParams={getParams}
+          />
         </Form.Item>
       );
     case 'select':
@@ -104,7 +133,7 @@ function getFormItem(item: FormItem): React.ReactNode {
       const mode = type === 'multiselect' ? 'multiple' : undefined;
       return (
         <Form.Item label={label} name={name} rules={rules}>
-          <Select mode={mode} placeholder={placeholder}>
+          <Select showSearch={showSearch} mode={mode} placeholder={placeholder}>
             {option &&
               // eslint-disable-next-line no-shadow
               option.map((item: any) => {
@@ -169,7 +198,7 @@ function MyFormV4(props: FormProps) {
     }
   };
   return (
-    <div className={styles['result-type']}>
+    <div>
       <Form
         onValuesChange={handleValue}
         form={formResult}

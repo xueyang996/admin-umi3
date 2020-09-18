@@ -1,5 +1,5 @@
 import React, { useState, FC } from 'react';
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 
 import styles from './VerificationInput.less';
 
@@ -8,6 +8,8 @@ interface VerficationInputProps {
   getVerifyCode: () => void;
   value?: string;
   onChange?: (value: string) => void;
+  checkPhone?: () => boolean;
+  placeholder?: string;
 }
 
 const VerficationInput: FC<VerficationInputProps> = (props) => {
@@ -15,7 +17,7 @@ const VerficationInput: FC<VerficationInputProps> = (props) => {
   const [btnStatus, setBtnStatus] = useState(false);
   const [code, setCode] = useState('');
 
-  const { getVerifyCode, value, onChange, ...restProps } = props;
+  const { getVerifyCode, value, onChange, checkPhone, ...restProps } = props;
 
   // 处理倒计时
   const handleTimeDown = (timer: ReturnType<typeof setTimeout> | null, count: number) => {
@@ -40,6 +42,11 @@ const VerficationInput: FC<VerficationInputProps> = (props) => {
     if (btnStatus) {
       return;
     }
+    // 有校验条件但是不通过
+    if (checkPhone && !checkPhone()) {
+      message.error('请输入正确手机号！');
+      return;
+    }
     if (getVerifyCode) {
       getVerifyCode();
     }
@@ -59,6 +66,7 @@ const VerficationInput: FC<VerficationInputProps> = (props) => {
       <Input
         {...restProps}
         value={value || code}
+        type="number"
         onChange={inputChange}
         suffix={
           <span className={styles.verifyBtn} onClick={getCode}>
