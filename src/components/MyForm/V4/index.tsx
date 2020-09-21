@@ -12,7 +12,7 @@ import {
   // Button,
   // Upload,
   // Rate,
-  // Checkbox,
+  Checkbox,
   // Row,
   // Col,
 } from 'antd';
@@ -95,7 +95,7 @@ function getFormItem(item: FormItem & SearchProps) {
       );
     case 'date':
       return (
-        <Form.Item label={label} name={name}>
+        <Form.Item label={label} name={name} rules={rules}>
           <DatePicker format={dateFormat || 'YYYY/MM/DD'} style={{ width: '100%' }} />
         </Form.Item>
       );
@@ -125,6 +125,22 @@ function getFormItem(item: FormItem & SearchProps) {
             getOption={getOption}
             getParams={getParams}
           />
+        </Form.Item>
+      );
+    case 'checkbox':
+      return (
+        <Form.Item label={label} rules={rules} name={name} style={{ width: '100%' }}>
+          <Checkbox.Group>
+            {option &&
+              // eslint-disable-next-line no-shadow
+              option.map((item: any) => {
+                return (
+                  <Checkbox key={item.value || item} value={item.value || item}>
+                    {item.key || item}
+                  </Checkbox>
+                );
+              })}
+          </Checkbox.Group>
         </Form.Item>
       );
     case 'select':

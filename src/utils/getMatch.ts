@@ -84,6 +84,7 @@ export type InputType =
   | 'multiselect'
   | 'selectSearch'
   | 'input'
+  | 'checkbox'
   | 'number'
   | 'date';
 
