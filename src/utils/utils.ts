@@ -45,3 +45,33 @@ export const getPageQuery = () => {
 export const isNotEmptyFormValue = (formValue: any) => {
   return !!(formValue && formValue.length) || typeof formValue === 'number';
 };
+
+export function getOptionFromObj(optionObj: any) {
+  const result: any[] = [];
+  Object.keys(optionObj).map((key: string) => {
+    const value = optionObj[key];
+    result.push({
+      value: /^[0-9]+$/.test(key) ? parseInt(key, 10) : key, // 全为数字是key转化为数字
+      label: value,
+    });
+    return key;
+  });
+  return result;
+}
+export function getOptionFromArray(optionsArray: any, transKey: any) {
+  if (optionsArray instanceof Array) {
+    return optionsArray.map((item) => {
+      if (typeof item === 'object') {
+        return {
+          value: item[transKey.value],
+          label: item[transKey.label],
+        };
+      }
+      return {
+        value: item,
+        label: item,
+      };
+    });
+  }
+  return getOptionFromObj(optionsArray);
+}

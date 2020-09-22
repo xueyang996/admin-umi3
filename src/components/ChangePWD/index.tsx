@@ -140,7 +140,7 @@ const ChangePWD: FC<Props> = (props) => {
   };
   return (
     <MyModal
-      title={title}
+      title={title || '忘记密码'}
       width={width || '430px'}
       visible={modalVisible}
       onOk={submitForm}

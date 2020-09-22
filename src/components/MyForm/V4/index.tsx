@@ -46,6 +46,9 @@ export type FormItem = {
   originOption?: { [T: string]: any[] };
   getVerifyCode?: () => void;
   checkPhone?: () => boolean;
+  getOption?: (params?: any) => any;
+  getParams?: (params?: any) => any;
+  fetchOption?: (params?: any) => Promise<any>;
 };
 
 export interface FormProps {
