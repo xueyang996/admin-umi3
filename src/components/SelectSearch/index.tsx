@@ -5,13 +5,23 @@ import debounce from 'lodash/debounce';
 const { Option } = Select;
 
 export type SearchProps = {
+  /** fetchOption 搜索方法 */
   fetchOption?: (params: any) => Promise<any>;
+  /** getParams 请求参数处理方法 */
   getParams?: (params: any) => any;
+  /** 返回结果处理方法，默认展示key  value */
   getOption?: (params: any) => any;
+  /** onChange 返回选择结果 默认携带key、value */
   onChange?: (params: any) => any;
   mode?: 'multiple' | 'tags' | undefined;
+  /** placeholder 提示信息 */
   placeholder?: string;
+  /** itemStyle select 样式 */
   itemStyle?: CSSProperties;
+  /** defaultValue 默认值 */
+  // defaultValue?: any;
+  /** defaultKey 默认搜索关键字 */
+  defaultKey?: string;
 };
 
 export default class UserRemoteSelect extends React.Component<SearchProps> {
@@ -29,8 +39,19 @@ export default class UserRemoteSelect extends React.Component<SearchProps> {
     fetching: false,
   };
 
-  fetchUser = (value: string) => {
-    const { fetchOption, getParams, getOption } = this.props;
+  // 初始化加载数据
+  componentDidMount() {
+    const { defaultKey = '' } = this.props;
+    this.fetchUser(defaultKey || '', true);
+  }
+
+  /**
+   *
+   * @param value 关键字
+   * @param updateStateFlag 是否需要更新state中的value
+   */
+  fetchUser = (value: string, updateStateFlag?: boolean) => {
+    const { fetchOption, getParams, getOption, onChange } = this.props;
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ data: [], fetching: true });
@@ -42,7 +63,18 @@ export default class UserRemoteSelect extends React.Component<SearchProps> {
           return;
         }
         const data = getOption && getOption(body);
-        this.setState({ data, fetching: false });
+        const updateData: any = { data, fetching: false };
+        if (updateStateFlag) {
+          const item = data.find((itemEach: any) => itemEach.key === value);
+          if (item) {
+            item.label = item.key;
+            updateData.value = item;
+            if (onChange) {
+              onChange(item);
+            }
+          }
+        }
+        this.setState(updateData);
       });
     }
   };
