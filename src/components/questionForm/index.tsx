@@ -1,11 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-param-reassign */
 import React, { CSSProperties, useEffect, useState } from 'react';
-import { Form, Radio, Input, InputNumber, Checkbox, Button, Spin, message } from 'antd';
+import { Form, Radio, Input, InputNumber, Checkbox, Button, Spin, message, DatePicker } from 'antd';
 import classNames from 'classnames';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { isNotEmptyFormValue } from '@/utils/utils';
 import { FormInstance } from 'antd/lib/form';
+
+import moment from 'moment';
 
 import styles from './index.less';
 
@@ -21,8 +23,23 @@ export type QuestionItem = {
   option?: { label: string; value: string }[] | string[];
 };
 
+const DATE_DEFAULT = 'YYYY/MM/DD';
+
+export const getResult = (allValues: any, date?: string) => {
+  const result = {};
+  Object.keys(allValues).forEach((element) => {
+    const item = allValues[element];
+    if (moment.isMoment(item)) {
+      result[element] = item.format(date || DATE_DEFAULT);
+    } else {
+      result[element] = item;
+    }
+  });
+  return result;
+};
+
 const getItem = (props: QuestionItem) => {
-  const { type, placeholder, option = [], valueType } = props;
+  const { type, placeholder, option = [], valueType, dateFormat } = props;
   let node = <div />;
   const commonStyle = {
     display: 'block',
@@ -43,15 +60,21 @@ const getItem = (props: QuestionItem) => {
 
     // 单选框
     case 'INPUT_RADIO':
-      node = (
-        <Radio.Group>
-          {option.map((item: any) => (
-            <Radio key={item.label || item} style={commonStyle} value={item.value || item}>
-              {item.label || item}
-            </Radio>
-          ))}
-        </Radio.Group>
-      );
+      // // date 日期
+      // case 'DATE':
+      if (valueType === 'DATE') {
+        node = <DatePicker format={dateFormat || DATE_DEFAULT} style={{ width: '100%' }} />;
+      } else {
+        node = (
+          <Radio.Group>
+            {option.map((item: any) => (
+              <Radio key={item.label || item} style={commonStyle} value={item.value || item}>
+                {item.label || item}
+              </Radio>
+            ))}
+          </Radio.Group>
+        );
+      }
       break;
 
     // 多选框
@@ -115,7 +138,8 @@ const QuestionForm = (props: QuestionProps) => {
   const getNextQuestion = (changedValues: any, allValues: any) => {
     if (currentStep === list.length - 1) {
       if (onChange) {
-        onChange(changedValues, allValues);
+        const allValuesResult = getResult(allValues);
+        onChange(changedValues, allValuesResult);
       }
       if (percent !== 100) {
         setLoading(true);
