@@ -58,17 +58,25 @@ const Login: React.FC<{}> = () => {
     setSubmitting(true);
     try {
       // 登录
-      const msg = await fakeAccountLogin({ ...values, type });
-      if (msg.status === 'ok' || msg.code === '0') {
+      if (process.env.NODE_ENV !== 'development') {
         message.success('登录成功！');
         replaceGoto();
         setTimeout(() => {
           refresh();
         }, 0);
-        return;
+      } else {
+        const msg = await fakeAccountLogin({ ...values, type });
+        if (msg.status === 'ok' || msg.code === '0') {
+          message.success('登录成功！');
+          replaceGoto();
+          setTimeout(() => {
+            refresh();
+          }, 0);
+          return;
+        }
+        // 如果失败去设置用户错误信息
+        setUserLoginState({});
       }
-      // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
     } catch (error) {
       message.error('登录失败，请重试！');
     }

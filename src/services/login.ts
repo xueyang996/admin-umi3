@@ -8,8 +8,12 @@ export interface LoginParamsType {
   type: string;
 }
 
+const PREFIX =
+  process.env.NODE_ENV === 'development'
+    ? '/api/login/account'
+    : 'http://yapi.ii-ai.tech/mock/359/login';
 export async function fakeAccountLogin(params: LoginParamsType) {
-  return request('http://yapi.ii-ai.tech/mock/359/login', {
+  return request(PREFIX, {
     method: 'POST',
     data: params,
   });
