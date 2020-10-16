@@ -2,7 +2,7 @@
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
-import routes from './routes'
+import routes from './routes';
 
 const { REACT_APP_ENV } = process.env;
 
@@ -12,6 +12,8 @@ export default defineConfig({
   dva: {
     hmr: true,
   },
+  publicPath: '/admin-umi3/',
+  base: '/admin-umi3',
   layout: {
     name: 'Ant Design Pro',
     locale: true,

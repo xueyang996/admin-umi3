@@ -9,7 +9,7 @@ export interface LoginParamsType {
 }
 
 export async function fakeAccountLogin(params: LoginParamsType) {
-  return request<API.LoginStateType>('/api/login/account', {
+  return request('http://yapi.ii-ai.tech/mock/359/login', {
     method: 'POST',
     data: params,
   });
