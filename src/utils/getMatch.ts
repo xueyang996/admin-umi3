@@ -103,3 +103,16 @@ export const getType = (item: any): InputType => {
   }
   return 'input';
 };
+
+export const getListItem = (item: any) => {
+  const type = getType(item);
+  const { key, option, required, span } = item;
+  return {
+    type,
+    label: key,
+    name: key,
+    option,
+    span,
+    rules: [{ required, message: `${key}不能为空` }],
+  };
+};
