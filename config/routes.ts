@@ -38,6 +38,12 @@ export default [
     component: './ListTableList',
   },
   {
+    name: '表单页面',
+    icon: 'table',
+    path: '/searchTable/demoConfig',
+    component: './SearchTable',
+  },
+  {
     name: '组件展示',
     icon: 'table',
     path: '/demoCom',
@@ -50,4 +56,4 @@ export default [
   {
     component: './404',
   },
-]
+];
