@@ -18,7 +18,9 @@ import {
   Col,
 } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import VertifiCode from '@/components/Input/VerificationInput';
+import InputVerify from '@/components/Input/VerificationInput';
+import MyUpload from '@/components/MyUpload';
+import RichText from '@/components/RichText';
 import SelectSearch, { SearchProps } from '@/components/SelectSearch';
 import { InputType } from '@/utils/getMatch';
 
@@ -70,6 +72,12 @@ export type FormItem = {
   checkPhone?: () => boolean;
   showTime?: boolean;
   disabledDate?: (currentDate: any) => boolean;
+  /** describe  type为upload的描述文案 */
+  describe?: string | string[];
+  /** extra type为upload的额外描述文案 */
+  extra?: string | string[];
+  /** uploadImage 上传图片方法 */
+  uploadImage?: (params: any) => Promise<any>;
 };
 
 export interface FormProps {
@@ -103,6 +111,9 @@ function getFormItem(item: FormItem & SearchProps) {
     fetchOption,
     allowClear = false,
     disabledDate,
+    extra,
+    describe,
+    uploadImage,
     showTime,
   } = item;
   let { placeholder } = item;
@@ -130,11 +141,15 @@ function getFormItem(item: FormItem & SearchProps) {
       );
     case 'input':
       return <Input type={inputType} style={itemStyle} placeholder={placeholder} />;
+    case 'upload':
+      return <MyUpload style={itemStyle} extra={extra} describe={describe} />;
+    case 'richtext':
+      return <RichText uploadImage={uploadImage} />;
     case 'textarea':
       return <TextArea style={itemStyle} placeholder={placeholder} />;
     case 'phone':
       return (
-        <VertifiCode
+        <InputVerify
           placeholder={placeholder}
           checkPhone={item.checkPhone}
           getVerifyCode={getVerifyCode}

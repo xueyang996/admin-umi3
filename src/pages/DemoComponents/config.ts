@@ -40,9 +40,35 @@ export const DEMO_FORM: FormItem[] = [
     getParams: (value) => value,
   },
   {
+    type: 'select',
+    label: '关联父级',
+    name: 'parentCode',
+    childName: 'childCode',
+    option: [
+      { key: '选项一', value: '1' },
+      { key: '选项二', value: '2' },
+    ],
+  },
+  {
+    type: 'select',
+    label: '关联子级',
+    name: 'childCode',
+    parentName: 'parentCode',
+    originOption: {
+      '1': [
+        { key: '子选项一', value: '子1' },
+        { key: '子选项二', value: '子2' },
+      ],
+      '2': [
+        { key: '子选项三', value: '子3' },
+        { key: '子选项四', value: '子4' },
+      ],
+    },
+    option: [],
+  },
+  {
     type: 'phone',
     placeholder: '获取验证码',
-    hidden: true,
     label: '验证码',
     name: 'code',
   },
@@ -65,5 +91,14 @@ export const DEMO_FORM: FormItem[] = [
     placeholder: '输入数字',
     label: '数字',
     name: 'number',
+  },
+  {
+    type: 'upload',
+    label: '上传附件',
+    name: 'upload',
+    extra: ['支持扩展名：.word .pdf', '建议上传30M以内大小的PDF文件'],
+    describe: '点击或将PDF拖拽到这里上传',
+    itemStyle: { width: '300px', height: '150px', background: '#fbfdff' },
+    rules: [],
   },
 ];

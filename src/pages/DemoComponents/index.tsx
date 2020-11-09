@@ -4,6 +4,8 @@ import MyForm, { FormItem } from '@/components/MyForm/V4';
 import VertifyCode from '@/components/Input/VerificationInput';
 import ChangePWDModal from '@/components/ChangePWD';
 
+// import { SelectSearch } from 'ii-admin-business';
+
 import ChartDemo from './compontents/chart';
 import QuestionStep from './compontents/questionStep';
 import SelectSearch from './compontents/selectSearch';
@@ -65,8 +67,21 @@ export default (): React.ReactNode => {
       <h3>问题搜集demo</h3>
       <QuestionStep />
 
-      <SelectSearch />
-
+      <h3>测试 ii-ui-business</h3>
+      <SelectSearch
+        placeholder="请输入搜索关键字"
+        itemStyle={{ width: '400px' }}
+        getOption={(data) => {
+          return data.map((item: any) => ({ key: item, value: item }));
+        }}
+        fetchOption={() => {
+          return new Promise((resolve) => {
+            resolve(['searchData1', 'searchData2']);
+          });
+        }}
+        getParams={(value) => value}
+      />
+      <Form />
       <ChangePWDModal
         modalVisible={modalPWDVisible}
         changePWD={() =>
@@ -88,6 +103,7 @@ export default (): React.ReactNode => {
         inputPhone
       />
       <Modal
+        width="1080px"
         visible={modalVisible}
         title={modalInfo.title}
         onCancel={() => {

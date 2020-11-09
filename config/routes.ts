@@ -50,6 +50,12 @@ export default [
     component: './DemoComponents',
   },
   {
+    name: 'ii-admin-base组件展示',
+    icon: 'table',
+    path: '/ii-base',
+    component: './IIBaseDemo',
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },
