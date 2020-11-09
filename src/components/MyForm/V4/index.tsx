@@ -23,6 +23,7 @@ import SelectSearch, { SearchProps } from '@/components/SelectSearch';
 import { InputType } from '@/utils/getMatch';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 // 栅格布局时计算每个item的layout
 const getLayoutItem = (formItemLayout: any, preSpan: number, span: number) => {
@@ -81,7 +82,7 @@ export interface FormProps {
   showCol?: boolean;
 }
 const formItemLayoutDefault = {
-  labelCol: { span: 6 },
+  labelCol: { span: 8 },
   wrapperCol: { span: 14 },
 };
 const nopop = function nopop() {};
@@ -129,6 +130,8 @@ function getFormItem(item: FormItem & SearchProps) {
       );
     case 'input':
       return <Input type={inputType} style={itemStyle} placeholder={placeholder} />;
+    case 'textarea':
+      return <TextArea style={itemStyle} placeholder={placeholder} />;
     case 'phone':
       return (
         <VertifiCode
@@ -188,9 +191,8 @@ function getFormItem(item: FormItem & SearchProps) {
   }
 }
 
-let preSpan = 0;
-
 function MyFormV4(props: FormProps) {
+  let preSpan = 0;
   const {
     list,
     form: formProps,
@@ -251,11 +253,14 @@ function MyFormV4(props: FormProps) {
       >
         <Row>
           {list.map((item: FormItem) => {
-            if (item.parentName && relatedValue[item.name]) {
+            if (item.parentName) {
               // eslint-disable-next-line no-param-reassign
-              item.option = item.originOption![relatedValue[item.name]];
+              item.option = relatedValue[item.parentName]
+                ? item.originOption![relatedValue[item.parentName]]
+                : [];
             }
-            const { span = 24, name, label, rules, hidden = false } = item;
+            const { name, label, rules, hidden = false } = item;
+            const span = item.span === 24 || !showCol ? 24 : 12;
             let formLayoutCopy;
             if (showCol) {
               [formLayoutCopy, preSpan] = getLayoutItem(formItemLayout, preSpan, span);

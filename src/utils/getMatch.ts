@@ -82,6 +82,7 @@ export type InputType =
   | 'phone'
   | 'select'
   | 'multiselect'
+  | 'textarea'
   | 'selectSearch'
   | 'input'
   | 'checkbox'
