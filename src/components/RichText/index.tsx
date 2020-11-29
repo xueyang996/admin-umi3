@@ -23,14 +23,14 @@ const callBackDefault = (res: any) => {
   const { data } = res;
   return data.file_url;
 };
-const RichText = (props: RichText) => {
+const RichTextF = (props: RichText) => {
   const {
     value,
     onChange,
     height = 500,
     uploadImage,
     fileKey = 'file',
-    tinymceSrc = 'https://admin-ipark.ai-indeed.com/lib/tinymce.min.js',
+    tinymceSrc = 'https://cdn.bootcdn.net/ajax/libs/tinymce/5.5.1/tinymce.min.js',
     callBack = callBackDefault,
   } = props;
 
@@ -85,4 +85,4 @@ const RichText = (props: RichText) => {
   );
 };
 
-export default RichText;
+export default RichTextF;
